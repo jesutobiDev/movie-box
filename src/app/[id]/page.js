@@ -63,7 +63,7 @@ const MoviePage = () => {
                         </div>
                         <p className="text-3xl font-medium">{movie.title}</p>
                         <p>{movie.overview}</p>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 flex-wrap pb-10">
                             <div className="flex items-baseline gap-1">
                                 <FaRegStar size={15} />
                                 <p>{(movie.vote_average).toFixed(1)}/10</p>
@@ -71,7 +71,7 @@ const MoviePage = () => {
                             <div className="w-1 h-1 rounded-full bg-black"></div>
                             <p>{convertMinutesToHoursAndMinutes(movie.runtime)}</p>
                             <div className="w-1 h-1 rounded-full bg-black"></div>
-                            <p>{formatDate(movie.release_date)}</p>
+                            <p className="">{formatDate(movie.release_date)}</p>
                         </div>
                     </div>
                 </div>
