@@ -10,7 +10,7 @@ import Header from '../components/Header';
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import { IoArrowBackOutline } from "react-icons/io5";
 
-const SearchPage = () => {
+const SearchContent = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { searchResults, searchStatus, currentPage, totalPages } = useSelector((state) => state.movies);
@@ -102,4 +102,14 @@ const SearchPage = () => {
     );
 };
 
-export default SearchPage;
+
+
+const SearchPage = () => {
+    return (
+      <Suspense fallback={<Loading />}>
+        <SearchContent />
+      </Suspense>
+    );
+  };
+  
+  export default SearchPage;
