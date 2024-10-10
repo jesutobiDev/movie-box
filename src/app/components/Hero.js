@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter, usePathname } from 'next/navigation'; // Updated import
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdSearch } from 'react-icons/md';
 import SearchResults from './SearchResults';
-import { searchMovies, resetSearch } from '../redux/slices/movieSlice';
+import { resetSearch, searchMovies } from '../redux/slices/searchMoviesSlice';
 import tv from '../../../public/tv.svg';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -14,9 +14,9 @@ const Hero = () => {
   const [isSearchResultsVisible, setIsSearchResultsVisible] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const pathname = usePathname(); // Get the current pathname
+  const pathname = usePathname();
 
-  const { searchResults, searchStatus } = useSelector((state) => state.movies);
+  const { results, status } = useSelector((state) => state.searchMovies);
 
   const searchRef = useRef(null);
 
@@ -82,10 +82,10 @@ const Hero = () => {
               placeholder="What do you want to watch?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyPress}
             />
             {
-              searchStatus === 'loading' ? (
+              status === 'loading' ? (
                 <AiOutlineLoading3Quarters
                   className="text-white text-2xl cursor-pointer animate-spin duration-300"
                 />
@@ -101,14 +101,14 @@ const Hero = () => {
           {isSearchResultsVisible && (
             <div className="backdrop-blur-md">
               {/* No results found */}
-              {searchStatus === 'succeeded' && searchResults.length === 0 && (
+              {status === 'succeeded' && results.length === 0 && (
                 <p className="text-white border-[1.4px] rounded-lg p-2 py-10 flex items-center justify-center">No results found</p>
               )}
 
               {/* Render search results */}
-              {searchStatus === 'succeeded' && searchResults.length > 0 && (
+              {status === 'succeeded' && results.length > 0 && (
                 <div className="space-y-4 w-full ml-auto">
-                  <SearchResults results={searchResults} />
+                  <SearchResults results={results} />
 
                   {/* Link to See More */}
                   <Link

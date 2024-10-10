@@ -1,35 +1,37 @@
 'use client';
 import React, { useEffect } from 'react';
-import PopularMovies from './components/PopularMovies';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMovies } from './redux/slices/movieSlice';
-import Footer from './components/Footer';
+import { getPopularMovies } from './redux/slices/popularMoviesSlice';
 import Hero from './components/Hero';
+import BackdropSlider from './components/BackdropSlider';
+import PopularMovies from './components/PopularMovies';
+import Footer from './components/Footer';
 import Loading from './components/Loading';
 import NotFound from './not-found';
-import BackdropSlider from './components/BackdropSlider';
 
 export default function Home() {
-  const { movies, currentPage, status } = useSelector((state) => state.movies);
+  const { movies, currentPage, status } = useSelector((state) => state.popularMovies);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMovies(currentPage));
-}, [currentPage, dispatch]);
+    dispatch(getPopularMovies(currentPage));
+  }, [currentPage, dispatch]);
 
+  // Display Loading component while fetching movies
   if (status === 'loading') {
     return <Loading />;
   }
 
+  // Display NotFound component if fetching movies failed
   if (status === 'failed') {
-    return <NotFound/>;
+    return <NotFound />;
   }
 
-  if (status === 'succeeded') {
+  // Display the main content if movies were successfully fetched
+  if (status === 'succeeded' && movies.length > 0) {
     const backdropMovies = movies.slice(0, 5);
-
     return (
-      <div className="">
+      <div>
         <Hero />
         <BackdropSlider movies={backdropMovies} />
         <PopularMovies movies={movies} />
@@ -38,4 +40,6 @@ export default function Home() {
     );
   }
 
+  // Display a message if no movies were found
+  return <div>No movies found.</div>;
 }

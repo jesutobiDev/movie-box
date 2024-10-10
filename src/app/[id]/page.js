@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMovieById } from '../redux/slices/movieSlice';
+import { getMovieById } from '../redux/slices/movieDetailsSlice';
 import Image from 'next/image';
 import { FaRegStar } from "react-icons/fa";
 import { formatDate } from '../utilities/dateFormatter'
@@ -16,23 +16,15 @@ const MoviePage = () => {
     const { id } = useParams();
     const router = useRouter();
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(true);
-
-    // Access the movie state from the Redux store
-    const movie = useSelector((state) => state.movies.movie);
-    const status = useSelector((state) => state.movies.status);
-    const error = useSelector((state) => state.movies.error);
+    const { movie, status, error } = useSelector((state) => state.movieDetails);
 
     useEffect(() => {
-        const fetchMovie = async () => {
+        if (id) {
             dispatch(getMovieById(id));
-            setLoading(false);
-        };
-
-        fetchMovie();
+        }
     }, [dispatch, id]);
 
-    if (loading || status === 'loading') {
+    if (status === 'loading') {
         return <Loading />;
     }
 
@@ -43,7 +35,7 @@ const MoviePage = () => {
 
     return (
         <div className="px-5 lg:px-10 py-5 lg:py-10">
-            <Header/>
+            <Header />
             {movie ? (
                 <div className="space-y-5 mt-10">
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.back()}>
@@ -93,3 +85,6 @@ const MoviePage = () => {
 };
 
 export default MoviePage;
+
+
+

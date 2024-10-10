@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { searchMovies, incrementPage } from '../redux/slices/movieSlice';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Loading from '../components/Loading';
 import Link from 'next/link';
@@ -9,15 +8,17 @@ import Image from 'next/image';
 import Header from '../components/Header';
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import { IoArrowBackOutline } from "react-icons/io5";
+import {incrementPage, decrementPage, searchMovies } from "../redux/slices/searchMoviesSlice"
 
 const SearchContent = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { searchResults, searchStatus, currentPage, totalPages } = useSelector((state) => state.movies);
+    const { results, status, currentPage, totalPages } = useSelector((state) => state.searchMovies);
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('query');
 
     useEffect(() => {
+        console.log(searchQuery);
         if (searchQuery) {
             dispatch(searchMovies({ query: searchQuery, page: currentPage }));
         }
@@ -25,7 +26,7 @@ const SearchContent = () => {
 
     const handlePrevPage = () => {
         if (currentPage > 1) {
-            dispatch(incrementPage(-1));
+            dispatch(decrementPage(-1));
         }
     };
 
@@ -35,7 +36,7 @@ const SearchContent = () => {
         }
     };
 
-    if (searchStatus === 'loading') {
+    if (status === 'loading') {
         return <Loading />;
     }
 
@@ -46,14 +47,14 @@ const SearchContent = () => {
 
                 {
                     searchQuery ? (
-                        searchStatus === 'succeeded' && searchResults.length > 0 ? (
+                        status === 'succeeded' && results.length > 0 ? (
                             <div className="space-y-5 mt-10">
                                 <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.back()}>
                                     <IoArrowBackOutline className="text-black text-xl" />
                                     <p className="text-xl font-medium text-black">Go back</p>
                                 </div>
                                 <div className="mt-20 divide-y divide-black">
-                                    {searchResults.map(movie => (
+                                    {results.map(movie => (
                                         <Link key={movie.id} href={`/${movie.id}`} className="flex gap-2 py-4 w-full">
                                             <div className="w-32 h-32 relative rounded-lg overflow-hidden">
                                                 <Image
@@ -113,3 +114,5 @@ const SearchPage = () => {
   };
   
   export default SearchPage;
+
+

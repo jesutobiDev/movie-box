@@ -38,7 +38,7 @@ const Header = () => {
                             placeholder="What do you want to watch?"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyPress={handleKeyPress}
+                            onKeyDown={handleKeyPress}
                         />
                         <MdSearch
                             className="text-black text-2xl cursor-pointer"
