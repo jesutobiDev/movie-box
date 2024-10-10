@@ -18,7 +18,6 @@ const SearchContent = () => {
     const searchQuery = searchParams.get('query');
 
     useEffect(() => {
-        console.log(searchQuery);
         if (searchQuery) {
             dispatch(searchMovies({ query: searchQuery, page: currentPage }));
         }

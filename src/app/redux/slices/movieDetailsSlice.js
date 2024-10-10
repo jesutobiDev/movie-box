@@ -5,11 +5,10 @@ import { fetchMovieById } from '../../api-calls/fetchMovies';
 export const getMovieById = createAsyncThunk(
   'movieDetails/getMovieById',
   async (movieId, { rejectWithValue }) => {
-    console.log(movieId);
     try {
       const response = await fetchMovieById(movieId);
-      console.log(response)
       // If no movie data is found, reject the promise
+      // I did this because the api was returning a response for movie search for ids like 5355j, the api returned a respose matching that for the 5355 part. I guess their system has a way of trimming letters from the payload
       if (movieId != response.id) {
         return rejectWithValue('Movie not found');
       }
