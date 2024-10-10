@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation'; // Updated import
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,14 +11,38 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Hero = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchResultsVisible, setIsSearchResultsVisible] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname(); // Get the current pathname
 
   const { searchResults, searchStatus } = useSelector((state) => state.movies);
+
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchResultsVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchRef]);
+
+  useEffect(() => {
+    handleResetSearch();
+    setIsSearchResultsVisible(false);
+  }, [pathname]);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       dispatch(searchMovies({ query: searchQuery, page: 1 }));
+      setIsSearchResultsVisible(true);
     }
   };
 
@@ -38,11 +62,10 @@ const Hero = () => {
     router.push(`/search?query=${searchQuery}`).then(() => {
       handleResetSearch();
     });
-
   };
 
   return (
-    <div className="relative w-screen">
+    <div className="relative w-screen" ref={searchRef}>
       <div className="flex flex-col md:flex-row md:justify-between absolute top-0 left-0 z-10 w-screen px-5 gap-2 lg:px-10 py-5">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 h-fit w-fit">
@@ -75,28 +98,30 @@ const Hero = () => {
             }
           </div>
 
-          <div className="backdrop-blur-md">
-            {/* No results found */}
-            {searchStatus === 'succeeded' && searchResults.length === 0 && (
-              <p className="text-white border-[1.4px] rounded-lg p-2 py-10 flex items-center justify-center">No results found</p>
-            )}
+          {isSearchResultsVisible && (
+            <div className="backdrop-blur-md">
+              {/* No results found */}
+              {searchStatus === 'succeeded' && searchResults.length === 0 && (
+                <p className="text-white border-[1.4px] rounded-lg p-2 py-10 flex items-center justify-center">No results found</p>
+              )}
 
-            {/* Render search results */}
-            {searchStatus === 'succeeded' && searchResults.length > 0 && (
-              <div className="space-y-4 w-full ml-auto">
-                <SearchResults results={searchResults} />
+              {/* Render search results */}
+              {searchStatus === 'succeeded' && searchResults.length > 0 && (
+                <div className="space-y-4 w-full ml-auto">
+                  <SearchResults results={searchResults} />
 
-                {/* Link to See More */}
-                <Link
-                  href={{ pathname: "/search", query: { query: searchQuery } }}
-                  onClick={handleSeeMore}
-                  className="text-white border-[1.4px] rounded-lg p-2 cursor-pointer flex items-center justify-center hover:bg-white/10 transition-all duration-300 ease-in-out"
-                >
-                  See more
-                </Link>
-              </div>
-            )}
-          </div>
+                  {/* Link to See More */}
+                  <Link
+                    href={{ pathname: "/search", query: { query: searchQuery } }}
+                    onClick={handleSeeMore}
+                    className="text-white border-[1.4px] rounded-lg p-2 cursor-pointer flex items-center justify-center hover:bg-white/10 transition-all duration-300 ease-in-out"
+                  >
+                    See more
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

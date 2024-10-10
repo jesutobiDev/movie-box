@@ -2,15 +2,17 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchMovies, incrementPage } from '../redux/slices/movieSlice';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Loading from '../components/Loading';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '../components/Header';
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const SearchPage = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { searchResults, searchStatus, currentPage, totalPages } = useSelector((state) => state.movies);
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('query');
@@ -41,10 +43,15 @@ const SearchPage = () => {
         <Suspense fallback={<Loading />}>
             <div className="px-5 lg:px-10 py-5 lg:py-10">
                 <Header />
+
                 {
                     searchQuery ? (
                         searchStatus === 'succeeded' && searchResults.length > 0 ? (
-                            <>
+                            <div className="space-y-5 mt-10">
+                                <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.back()}>
+                                    <IoArrowBackOutline className="text-black text-xl" />
+                                    <p className="text-xl font-medium text-black">Go back</p>
+                                </div>
                                 <div className="mt-20 divide-y divide-black">
                                     {searchResults.map(movie => (
                                         <Link key={movie.id} href={`/${movie.id}`} className="flex gap-2 py-4 w-full">
@@ -80,7 +87,7 @@ const SearchPage = () => {
                                         <PiCaretRightBold className="text-black text-2xl" />
                                     </button>
                                 </div>
-                            </>
+                            </div>
                         ) : (
                             <p className="text-center text-xl w-screen h-screen flex items-center justify-center">Seems we couldn&apos;t find anything</p>
                         )

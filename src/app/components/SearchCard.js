@@ -15,7 +15,7 @@ const SearchCard = ({movie}) => {
             className="object-cover"
           />
         </div>
-        <p className="text-white font-medium">{movie.title}</p>
+        <p className="text-white font-medium flex-1">{movie.title}</p>
     </Link>
   )
 }
