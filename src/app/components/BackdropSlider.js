@@ -7,9 +7,8 @@ import Image from 'next/image';
 import { Pagination, Autoplay } from 'swiper/modules';
 
 const BackdropSlider = ({movies}) => {
-    console.log(movies);
     return (
-        <div className="h-[600px] md:h-[600px] lg:h-[600px] w-screen absolute top-0 left-0">
+        <div className="h-[600px] md:h-[600px] lg:h-[600px] w-screen">
             <Swiper
                 modules={[Pagination, Autoplay]}
                 pagination={{ clickable: true }}

@@ -2,7 +2,6 @@
 import { Provider } from "react-redux";
 import "./globals.css";
 import store from "./redux/store"
-import Header from "./components/Header";
 
 
 // export const metadata = {
@@ -15,10 +14,9 @@ export default function RootLayout({ children }) {
     <Provider store={store}>
       <html lang="en">
         <body
-          className="relative w-screen overflow-x-hidden"
+          className="w-screen overflow-x-hidden"
         >
-          <Header />
-          <main className="mt-16">
+          <main className="">
             {children}
           </main>
         </body>

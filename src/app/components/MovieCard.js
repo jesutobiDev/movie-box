@@ -6,9 +6,9 @@ import { getYear } from '../utilities/dateFormatter';
 
 const MovieCard = ({movie}) => {
   return (
-    <Link href={`/${movie.id}`} className="hover:scale-105 transition-all duration-300 ease-in-out" >
+    <Link href={`/${movie.id}`} className="hover:scale-105 transition-all duration-300 ease-in-out max-w-[300px] mx-auto w-full rounded-lg overflow-hidden" >
         {/* Thumbnail */}
-        <div className="w-full h-[400px] lg:h-[320px] relative" >
+        <div className="w-full h-[400px] lg:h-[320px] relative rounded-lg overflow-hidden" >
           <Image
             src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
             alt={movie.title}

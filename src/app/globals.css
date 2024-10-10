@@ -6,4 +6,19 @@
 
 body{
   font-family: "DM Sans", sans-serif;
+  overflow-y: auto;
+  
 }
+
+html{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+::-webkit-scrollbar {
+  width: 0px; 
+  background: transparent;
+}
+
+
