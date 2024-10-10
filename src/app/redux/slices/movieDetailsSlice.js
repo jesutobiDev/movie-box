@@ -4,9 +4,20 @@ import { fetchMovieById } from '../../api-calls/fetchMovies';
 // Thunk to fetch a movie by its ID
 export const getMovieById = createAsyncThunk(
   'movieDetails/getMovieById',
-  async (movieId) => {
-    const response = await fetchMovieById(movieId);
-    return response;
+  async (movieId, { rejectWithValue }) => {
+    console.log(movieId);
+    try {
+      const response = await fetchMovieById(movieId);
+      console.log(response)
+      // If no movie data is found, reject the promise
+      if (movieId != response.id) {
+        return rejectWithValue('Movie not found');
+      }
+      return response;
+    } catch (error) {
+      console.error(error);
+      return rejectWithValue(error.message);
+    }
   }
 );
 
