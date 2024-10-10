@@ -23,7 +23,7 @@ const PopularMovies = ({ movies }) => {
     return (
         <div className="px-5 lg:px-10 py-10">
             <p className="mb-5 text-2xl font-semibold">Popular Movies</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-10">
                 {
                     movies.length > 0 && movies.map(movie => (
                         <MovieCard key={movie.id} movie={movie} />
